@@ -82,10 +82,3 @@ with db as cursor:
     napolni_dirka()
     napolni_ekipa()
 
-# def napolni_dirkaci():
-#     with open("archive/drivers.csv", "r") as dirkaci:
-#         for vrstica in list(dirkaci)[1:]:
-#             id, *_, short_name, ime, priimek, date, country = vrstica.strip().split(",")
-#             print(id, short_name, ime, priimek, date, country)
-# 
-# napolni_dirkaci()

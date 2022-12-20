@@ -21,11 +21,11 @@ folk = [
 
 def napolni_nujne_podatke(conn):
     with conn:
-        for (email, name) in folk:
-                (f"""
-                INSERT INTO uporabnik (email, name)
-                VALUES (?, ?)
-                """, (email, name))
+        conn.execute("""
+        INSERT INTO uporabnik 
+        (username, name) VALUES
+        ("email@email.com", "Neko ime")
+        """)
 
 def pripravi_vse(conn):
     ustvari_tabele(conn)
