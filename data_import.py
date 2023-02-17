@@ -8,7 +8,7 @@ def napolni_dirkaci():
         seznam = []
         caunt = 0
         for vrstica in csv_reader:
-            if caunt == 5: break
+            if caunt == 145: break
             caunt += 1
             tupl = tuple([vrstica[0]] + vrstica[4:-1])
             seznam.append(tupl)
@@ -22,11 +22,7 @@ def napolni_dirkalisca():
         csv_reader = csv.reader(dirkalisca, delimiter=',')
         naslovi_st = next(csv_reader)
         seznam = []
-        caunt = 0
         for vrstica in csv_reader:
-            if caunt == 3:
-                break
-            caunt+=1
             tupl = tuple([vrstica[0]] + vrstica[2:5])
             seznam.append(tupl)
         sql = "INSERT INTO dirkalisca (cid, name, location, country) VALUES (?, ?, ?, ?)"
@@ -38,10 +34,7 @@ def napolni_dirka():
         csv_reader = csv.reader(dirka, delimiter = ',')
         naslovi_st = next(csv_reader)
         seznam = []
-        caunt = 0
         for vrstica in csv_reader:
-            if caunt == 5: break
-            caunt += 1
             tupl = tuple([vrstica[0], vrstica[3] ,vrstica[5]])
             seznam.append(tupl)
         sql = "INSERT INTO dirka (raceid, dirkalisce, date) VALUES (?, ?, ?)"
@@ -53,10 +46,7 @@ def napolni_ekipa():
         csv_reader = csv.reader(ekipa, delimiter = ',')
         naslovi_st = next(csv_reader)
         seznam = []
-        caunt = 0
         for vrstica in csv_reader:
-            if caunt == 5: break
-            caunt += 1
             tupl = tuple([vrstica[0], vrstica[2], vrstica[3]])
             seznam.append(tupl)
         sql = "INSERT INTO ekipa (eid, team_name, nationality) VALUES (?, ?, ?)"
