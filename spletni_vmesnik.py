@@ -1,26 +1,45 @@
-import bottle
+from bottle import *
 import model
+import data_import
 
 glavni_model = model.Model()
 
-@bottle.route("/static/slikice/<filename>")
+@route("/static/img/<filename>")
 def serve_static_files_img(filename):
-    return bottle.static_file(
+    return static_file(
         filename, root="./static/img"
     )
 
-@bottle.route("/static/css/<filename>")
+@route("/static/css/<filename>")
 def serve_static_files_css(filename):
-    return bottle.static_file(
+    return static_file(
         filename, root="./static/css"
     )
 
-@bottle.get("/")
+@get("/")
 def glavna_stran():
 
     podatki = glavni_model.dobi_vse_uporabnike()
 
-    return bottle.template("glavna.html", uporabniki=podatki)
+    return template("template/glavna.html", uporabniki=podatki)
+
+@get("/dirkaci")
+def dirkaci_stran():
+    "Podatki pridobljeni iz modelov"
+    
+    # podatki = 
+
+    return template("template/dirkaci.html")
+
+@get("/dirkalisca")
+def dirkalisca_stran():
+    return template("template/dirkalisca.html")
+
+@get("/ekipa")
+def ekipa_stran():
+    return template("template/ekipa.html")
 
 
-bottle.run(debug=True, reloader=True)
+run(debug=True, reloader=True)
+
+
