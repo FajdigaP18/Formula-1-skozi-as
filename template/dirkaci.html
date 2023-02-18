@@ -1,0 +1,13 @@
+% rebase('template/osnova.html')
+
+<h1>Vsi dirkaci so</h1>
+
+<ul>
+    % for up in dirkaci:
+    <li>
+        <div class="columns">
+            <div class="column">{{ up[0] }}, {{up[1]}}, {{up[2]}}</div>
+        </div>
+    </li>
+    % end
+</ul>
