@@ -1,6 +1,6 @@
 from bottle import *
 import model
-import data_import
+#import data_import
 
 glavni_model = model.Model()
 
