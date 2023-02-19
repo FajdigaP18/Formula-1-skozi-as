@@ -43,6 +43,18 @@ class Dirkac:
     def poisci_sql(sql, podatki=None):
         for poizvedba in conn.execute(sql, podatki):
             yield Dirkac(*poizvedba)
+            
+    @staticmethod
+    def vsi_dirkaci():
+        '''Pridobi vse dirkace'''
+        sql = '''SELECT ime,
+                     priimek,
+                     dirkaci.drzava,
+                     dirkaci.rojstvo
+                FROM dirkaci;'''
+        vsi_dirkaci = conn.execute(sql).fetchall()
+        for dirkac in vsi_dirkaci:
+            yield dirkac
     
     # vse ekipe, za katere je dirkal 
     # NISM SE PREVERILA CE DELUJE !!!!!!!!!!!        
