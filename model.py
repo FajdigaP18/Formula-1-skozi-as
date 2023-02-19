@@ -97,8 +97,8 @@ class Ekipa:
     @staticmethod
     def pridobi_vse_ekipe():
         sql = '''
-                SELECT eid, team_name, nationality FROM ekipa
-                ORDER BY team_name;'''
+                SELECT eid, ime, nationality FROM ekipa
+                ORDER BY ime;'''
         ekipe = conn.execute(sql).fetchall()
         for ekipa in ekipe:
             yield ekipa
@@ -106,9 +106,9 @@ class Ekipa:
     @staticmethod
     def pridobi_vse_nemce():
         sql = '''
-                SELECT eid, team_name FROM ekipa
-                WHERE nationality = 'German'
-                ORDER BY team_name;'''
+                SELECT eid, ime FROM ekipa
+                WHERE drzava = 'German'
+                ORDER BY ime;'''
         ekipe = conn.execute(sql).fetchall()
         for ekipa in ekipe:
             yield ekipa
@@ -116,9 +116,9 @@ class Ekipa:
     @staticmethod
     def pridobi_vse_angleze():
         sql = '''
-                SELECT eid, team_name FROM ekipa
-                WHERE nationality = 'British'
-                ORDER BY team_name;'''
+                SELECT eid, ime FROM ekipa
+                WHERE drzava = 'British'
+                ORDER BY ime;'''
         ekipe = conn.execute(sql).fetchall()
         for ekipa in ekipe:
             yield ekipa
@@ -126,9 +126,9 @@ class Ekipa:
     @staticmethod
     def pridobi_vse_italijane():
         sql = '''
-                SELECT eid, team_name FROM ekipa
-                WHERE nationality = 'Italian'
-                ORDER BY team_name;'''
+                SELECT eid, ime FROM ekipa
+                WHERE drzava = 'Italian'
+                ORDER BY ime;'''
         ekipe = conn.execute(sql).fetchall()
         for ekipa in ekipe:
             yield ekipa
@@ -136,8 +136,8 @@ class Ekipa:
     @staticmethod
     def poisci_po_imenu(ime, limit=None):
         sql = '''
-            SELECT team_name FROM ekipa
-            WHERE team_name LIKE ?'''
+            SELECT ime FROM ekipa
+            WHERE ime LIKE ?'''
         podatki = ['%' + ime + '%']
         if limit:
             sql += ' LIMIT ?'
@@ -147,8 +147,8 @@ class Ekipa:
     @staticmethod
     def poisci_po_nacionalnosti(nacija, limit=None):
         sql = '''
-            SELECT nationality FROM ekipa
-            WHERE nationality LIKE ?'''
+            SELECT drzava FROM ekipa
+            WHERE drzava LIKE ?'''
         podatki = ['%' + nacija + '%']
         if limit:
             sql += ' LIMIT ?'
