@@ -63,7 +63,35 @@ class Dirkac:
     def najboljse_uvrstitve(self, conn):
         '''Poda podatke najboljše uvrstitve dirkača.'''
         curr = conn.cursor()
-        poizvedba = ''''''
+        poizvedba = '''SELECT dirkaci.ime,
+                              dirkaci.priimek,
+                              rezultati.pozicija,
+                              ekipa.ime,
+                              dirkalisca.ime,
+                              dirka.datum
+                         FROM dirkaci
+                              INNER JOIN
+                              rezultati ON dirkaci.did = rezultati.did
+                              INNER JOIN
+                              ekipa ON ekipa.eid = rezultati.cid
+                              INNER JOIN
+                              dirka ON dirka.raceid = rezultati.rid
+                              INNER JOIN
+                              dirkalisca ON dirka.dirkalisce = dirkalisca.cid
+                        WHERE dirkaci.ime = ? AND 
+                              dirkaci.priimek = ? AND 
+                              rezultati.pozicija = (
+                                                       SELECT min(rezultati.pozicija) 
+                                                         FROM rezultati
+                                                        GROUP BY rezultati.did
+                                                       HAVING rezultati.did = (
+                                                                                  SELECT dirkaci.did
+                                                                                    FROM dirkaci
+                                                                                   WHERE dirkaci.ime = ? AND 
+                                                                                         dirkaci.priimek = ?
+                                                                              )
+                                                   )
+                        ORDER BY dirka.datum DESC;'''
         curr.excecute(poizvedba, (self.ime, self.priimek))
         podatki = curr.fetchall()
         return podatki
@@ -73,7 +101,16 @@ class Dirkac:
     def zmagovalni_oder(self, conn):
         '''Poda stevilo uvrstitev dirkaca na zmagovalni oder.'''
         curr = conn.cursor()
-        poizvedba = ''''''
+        poizvedba = '''SELECT dirkaci.ime,
+                               dirkaci.priimek,
+                               count( * ) AS oder_za_zmagovalce
+                          FROM dirkaci
+                               INNER JOIN
+                               rezultati ON dirkaci.did = rezultati.did
+                         WHERE rezultati.pozicija < 4
+                         GROUP BY dirkaci.did
+                        HAVING dirkaci.ime = ? AND 
+                               dirkaci.priimek = ?'''
         curr.execute(poizvedba, (self.ime, self.priimek))
         podatki = curr.fetchall()
         return podatki
