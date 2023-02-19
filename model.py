@@ -197,14 +197,17 @@ class Dirkalisce:
         self.id = cid
         self.ime = ime
         self.drzava = drzava
-        
+    
+    @staticmethod
     def __str__(self):
         return self.ime
     
+    @staticmethod
     def poisci_sql(sql, podatki = None):
         for poizvedba in conn.execute(sql, podatki):
             yield Dirkalisce(*poizvedba)
     
+    @staticmethod
     def pridobi_vsa_dirkalisca():
         sql = '''
                 SELECT cid, ime, lokacija, drzava FROM dirkalisca
@@ -212,7 +215,8 @@ class Dirkalisce:
         vsa_dirkalisca = conn.execute(sql).fetchall()
         for dirkalisce in vsa_dirkalisca:
             yield dirkalisce
-            
+    
+    @staticmethod        
     def poisci_po_imenu(ime, limit=None):
         sql = '''
             SELECT ime FROM dirkalisca
@@ -222,6 +226,42 @@ class Dirkalisce:
             sql += ' LIMIT ?'
             podatki.append(limit)
         yield from Dirkalisce.poisci_sql(sql, podatki)
+    
+    @staticmethod
+    def najveckrat_zmagal():
+        '''Vrne dirkalisce in osebo ki je najveckarat zmagala na tem dirkaliscu ter stevilo zmag.'''
+        sql = '''SELECT tabela.proga,
+                       tabela.ime,
+                       tabela.priimek,
+                       max(tabela.st) AS stevilo_zmag
+                  FROM (
+                           SELECT rezultati.did,
+                                  dirkaci.did,
+                                  dirkaci.ime AS ime,
+                                  dirkaci.priimek AS priimek,
+                                  dirka.dirkalisce,
+                                  dirkalisca.cid,
+                                  dirkalisca.ime AS proga,
+                                  count( * ) AS st
+                             FROM rezultati
+                                  INNER JOIN
+                                  dirka ON dirka.raceid = rezultati.rid
+                                  INNER JOIN
+                                  dirkalisca ON dirkalisca.cid = dirka.dirkalisce
+                                  INNER JOIN
+                                  dirkaci ON dirkaci.did = rezultati.did
+                            WHERE rezultati.pozicija = 1
+                            GROUP BY rezultati.did,
+                                     dirka.dirkalisce
+                       )
+                       tabela
+                 GROUP BY dirkalisce
+                 order by tabela.proga;'''
+        vsa_dirkalisca = conn.execute(sql).fetchall()
+        for dirkalisce in vsa_dirkalisca:
+            yield dirkalisce
+        
+    
     
 class Sezona:
     def __init__(self, leto):
