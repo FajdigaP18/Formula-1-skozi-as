@@ -4,6 +4,7 @@ import model
 
 # glavni_model = model.Model()
 dirkaci_model = model.Dirkac()
+dirkalisca_model = model.Dirkalisce()
 ekipa_model = model.Ekipa()
 
 @route("/static/img/<filename>")
@@ -27,13 +28,30 @@ def glavna_stran():
 def dirkaci_stran():
     "Podatki pridobljeni iz modelov"
 
-    # podatki = dirkaci_model.()
+    podatki = dirkaci_model.vsi_dirkaci()
 
-    return template("template/dirkaci.html")
+    return template("template/dirkaci.html", dirkaci=podatki)
+
+@get("/dirkaci/<did:int>")
+def dirkaci_detajli(did):
+
+    dirkac = model.Dirkac.dobi_dirkaca(did)
+    
+    return template("template/dirkac_detaili.html", dirkac=dirkac)
 
 @get("/dirkalisca")
 def dirkalisca_stran():
-    return template("template/dirkalisca.html")
+
+    dirkalisca = dirkalisca_model.pridobi_vsa_dirkalisca()
+
+    return template("template/dirkalisca.html", dirkalisca=dirkalisca)
+
+@get("/dirkalisca/<did:int>")
+def dirkalisca_detajli(did):
+
+    dirkac = model.Dirkalisce.pridobi_vsa_dirkalisca()
+
+    return template("template/dirkalisce_detaili.html", dirkac=dirkac)
 
 @get("/ekipa")
 def ekipa_stran():

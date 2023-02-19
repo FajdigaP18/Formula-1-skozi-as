@@ -4,7 +4,8 @@ Formula 1 je največji razred motošporta, kot ga označuje FIA krovna avtomobil
 
 ## Načrt  projekta
 1. Pridobivanje podatkov
-2. ...
+2. Podatki urejeni v bazo
+3. Spletni vmesnik za prikazovanje teh podatkov
 
 ## ČLANA RAZVOJA EKIPE
 Žiga Avbreht in Polona Fajdiga

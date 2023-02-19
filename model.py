@@ -17,18 +17,7 @@ stare_v_novo = {'Tyrrell':'Mercedes', 'BAR':'Mercedes', 'Honda':'Mercedes', 'Bra
 
 
 # TODO: Tukaj ustvarimo bazo če je še ni
-
-class Model:
-
-    def dobi_vse_uporabnike(self):
-        with conn:
-            cur = conn.execute("""
-            SELECT * FROM uporabnik
-            """)
-
-            return cur.fetchall()
-        
-
+      
 class Dirkac:
     
     def __init__(self, ide=None, ime=None, priimek=None):
@@ -38,6 +27,18 @@ class Dirkac:
         
     def __str__(self):
         return f'{self.ime} {self.priimek}'
+    
+    @staticmethod
+    def dobi_dirkaca(did):
+        with conn:
+            cursor = conn.execute("""
+                SELECT did, ime, priimek 
+                FROM dirkaci
+                WHERE did=?
+            """, [did])
+            podatki = cursor.fetchone()
+            
+            return Dirkac(podatki[0], podatki[1], podatki[2])
     
     @staticmethod
     def poisci_sql(sql, podatki=None):
@@ -57,8 +58,7 @@ class Dirkac:
             yield dirkac
     
     # vse ekipe, za katere je dirkal 
-    # NISM SE PREVERILA CE DELUJE !!!!!!!!!!!        
-    @staticmethod
+    # NISM SE PREVERILA CE DELUJE !!!!!!!!!!!
     def vse_ekipe(self, conn):
         '''Poda tabelo vseh ekip v katerih je dirkal dirkač.'''
         sql = '''SELECT DISTINCT ime
@@ -113,6 +113,9 @@ class Dirkac:
                                                                               )
                                                    )
                         ORDER BY dirka.datum DESC;'''
+        # podatki2 = conn.execute(sql).fetchall()
+        # for pod in podatki2:
+        #    yield pod
         podatki = (self.ime, self.priimek, self.ime, self.priimek)
         yield conn.execute(sql, podatki)
 #        curr.excecute(poizvedba, (self.ime, self.priimek))
@@ -152,7 +155,6 @@ class Ekipa:
     def poisci_sql(sql, podatki=None):
         for poizvedba in conn.execute(sql, podatki):
             yield Ekipa(*poizvedba)
-
 
     @staticmethod
     def pridobi_vse_ekipe():
@@ -217,12 +219,11 @@ class Ekipa:
         yield from Ekipa.poisci_sql(sql, podatki)
         
 class Dirkalisce:
-    def __init__(self, cid, ime, drzava):
+    def __init__(self, cid=None, ime=None, drzava=None):
         self.id = cid
         self.ime = ime
         self.drzava = drzava
     
-    @staticmethod
     def __str__(self):
         return self.ime
     
@@ -286,8 +287,8 @@ class Dirkalisce:
             yield dirkalisce        
     
 class Sezona:
-    def __init__(self, leto):
-        self.leto
+    def __init__(self, leto=None):
+        self.leto = leto
         
     def __str__(self):
         return self.leto

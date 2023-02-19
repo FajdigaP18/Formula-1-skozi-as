@@ -9,7 +9,7 @@ def napolni_dirkaci():
         seznam = []
         caunt = 0
         for vrstica in csv_reader:
-            if caunt == 145: break
+            if caunt == 855: break
             caunt += 1
             tupl = tuple([vrstica[0]] + vrstica[4:-1])
             seznam.append(tupl)
