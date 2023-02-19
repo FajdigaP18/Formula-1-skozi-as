@@ -1,9 +1,7 @@
 import sqlite3
-import baza
 
 conn = sqlite3.connect("f1database.sqlite3")
 
-baza.pripravi_vse(conn)
 
 # moram se dokoncati povezave med starimi in novimi ekipami
 # vir : https://wtf1.com/post/these-are-all-the-f1-team-changes-in-the-last-decade/
@@ -17,6 +15,7 @@ stare_v_novo = {'Tyrrell':'Mercedes', 'BAR':'Mercedes', 'Honda':'Mercedes', 'Bra
                 'Marussia': 'Haas F1 Team', 'Manor Marussia' : 'Haas F1 Team', 'Virgin' 'Haas F1 Team'
                 'Wolf' : 'Williams'}
 
+
 # TODO: Tukaj ustvarimo bazo če je še ni
 
 class Model:
@@ -28,6 +27,7 @@ class Model:
             """)
 
             return cur.fetchall()
+        
 
 class Dirkac:
     
@@ -78,3 +78,49 @@ class Dirkac:
         podatki = curr.fetchall()
         return podatki
     
+class Ekipa:
+
+    def __init__(self, eid=None, ime=None, nationality=None):
+        self.eid = eid
+        self.ime = ime
+        self.nationality = nationality
+
+    def __str__(self) -> str:
+        return str(self.ime)
+    
+    @staticmethod
+    def poisci_sql(sql, podatki=None):
+        for poizvedba in conn.execute(sql, podatki):
+            yield Ekipa(*poizvedba)
+
+
+    @staticmethod
+    def pridobi_vse_ekipe():
+        sql = '''
+                SELECT eid, team_name, nationality FROM ekipa
+                ORDER BY team_name;'''
+        ekipe = conn.execute(sql).fetchall()
+        for ekipa in ekipe:
+            yield ekipa
+
+    @staticmethod
+    def poisci_po_imenu(ime, limit=None):
+        sql = '''
+            SELECT team_name FROM ekipa
+            WHERE team_name LIKE ?'''
+        podatki = ['%' + ime + '%']
+        if limit:
+            sql += ' LIMIT ?'
+            podatki.append(limit)
+        yield from Ekipa.poisci_sql(sql, podatki)
+
+    @staticmethod
+    def poisci_po_nacionalnosti(nacija, limit=None):
+        sql = '''
+            SELECT nationality FROM ekipa
+            WHERE nationality LIKE ?'''
+        podatki = ['%' + nacija + '%']
+        if limit:
+            sql += ' LIMIT ?'
+            podatki.append(limit)
+        yield from Ekipa.poisci_sql(sql, podatki)

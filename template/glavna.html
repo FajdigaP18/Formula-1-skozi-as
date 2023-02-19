@@ -1,15 +1,18 @@
-% rebase('template/osnova.html')
+% rebase('template/osnova.html', title='Domov')
+<style>
+    html {
+      background-image: url('/static/img/Ferrari-246-F1-Dino-1829.jpg');
+      background-size: cover;
+            background-repeat: no-repeat;
+    }
+  </style>
 
-<h1 class="moj-naslov">Formula 1 skozi čas</h1>
+<h1 font-size="100px" >Formula 1 skozi čas</h1>
 
-<ul>
-    % for up in uporabniki:
-    <li>
-        <div class="columns">
-            <div class="column">{{ up[0] }}</div>
-            <div class="column moja-rdeca">{{ up[1] }}</div>
-            <div class="column">{{ up[2] }}</div>
-        </div>
-    </li>
-    % end
-</ul>
+<p>
+    Dobrodošli na spletni strani zgodovine fromule 1. Tu si lahko ogledaš dirkače, dirkališča in ekipe ned leti 1950 in 2023.
+    <li>Če želiš si ogledati dirkače, klikni link <a href="/dirkači">dirkači</a>.</li>
+    <li>Če želiš dobiti rezultate za posamezno poddisciplino in leto, klikni link <a href="/results">rezultati</a>.</li>
+    <li>Če si iz protidopinškega komisija, se z uporabniškim imenom in geslom <a href="/register">registriraj</a>.</li>
+  </p>
+

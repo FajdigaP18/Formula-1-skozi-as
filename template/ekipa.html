@@ -1,1 +1,13 @@
-% rebase('template/osnova.html')
+% rebase('template/osnova.html', title='Ekipe')
+
+<h1>Vse ekipe so</h1>
+
+<ul>
+    % for e in ekipe:
+    <li>
+        <div class="columns">
+            <div class="column">{{e[1]}}, {{e[2]}}</div>
+        </div>
+    </li>
+    % end
+</ul>

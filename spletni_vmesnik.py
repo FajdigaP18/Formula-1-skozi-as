@@ -1,8 +1,9 @@
 from bottle import *
 import model
-#import data_import
+
 
 glavni_model = model.Model()
+ekipa_model = model.Ekipa()
 
 @route("/static/img/<filename>")
 def serve_static_files_img(filename):
@@ -26,7 +27,7 @@ def glavna_stran():
 @get("/dirkaci")
 def dirkaci_stran():
     "Podatki pridobljeni iz modelov"
-    
+
     # podatki = 
 
     return template("template/dirkaci.html")
@@ -37,7 +38,10 @@ def dirkalisca_stran():
 
 @get("/ekipa")
 def ekipa_stran():
-    return template("template/ekipa.html")
+
+    podatki = ekipa_model.pridobi_vse_ekipe()
+
+    return template("template/ekipa.html", ekipe=podatki)
 
 
 run(debug=True, reloader=True)
