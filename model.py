@@ -8,15 +8,15 @@ baza.pripravi_vse(conn)
 # moram se dokoncati povezave med starimi in novimi ekipami
 # vir : https://wtf1.com/post/these-are-all-the-f1-team-changes-in-the-last-decade/
 # vir : https://www.topgear.com/car-news/formula-one/formula-one-here-are-family-trees-every-team
-# stare_v_novo = {?: ['Mercedes', 'Tyrrell', 'BAR', 'Honda', 'Brawn'],
-#                 ?: ['Red Bull','Jaguar', 'Stewart'],
-#                 ?: ['AlphaTauri','Minardi ','Toro Rosso'],
-#                 ?: ['Alpine', 'Toleman','Benetton', 'Renault', 'Lotus', 'Lotus F1', '...'],
-#                 ?: ['Aston Martin', 'Jordan', 'MF1', 'Spyker', 'Spyker MF1', 'Force India', 'Racing Point'],
-#                 ?: ['Alfa Romeo', 'Sauber'], #LDS-Alfa Romeo,March-Alfa Romeo, Caterham
-#                 ?: ['Haas F1 Team','Marussia', 'Manor Marussia', 'Virgin'];
-#                 ?: ['Williams','Wolf'],
-#                 }
+stare_v_novo = {'Tyrrell':'Mercedes', 'BAR':'Mercedes', 'Honda':'Mercedes', 'Brawn':'Mercedes',
+                'Jaguar':'Red Bull', 'Stewart':'Red Bull',
+                'Minardi':'AlphaTauri','Toro Rosso':'AlphaTauri',
+                'Toleman' : 'Alpine','Benetton':'Alpine', 'Renault':'Alpine', 'Lotus':'Alpine', 'Lotus F1':'Alpine',
+                'Jordan' : 'Aston Martin', 'Spyker' : 'Aston Martin', 'Spyker MF1' : 'Aston Martin', 'Force India' : 'Aston Martin', 'Racing Point' : 'Aston Martin',
+                'Sauber' : 'Alfa Romeo', #LDS-Alfa Romeo,March-Alfa Romeo, Caterham
+                'Marussia': 'Haas F1 Team', 'Manor Marussia' : 'Haas F1 Team', 'Virgin' 'Haas F1 Team'
+                'Wolf' : 'Williams'}
+
 # TODO: Tukaj ustvarimo bazo če je še ni
 
 class Model:
@@ -59,8 +59,22 @@ class Dirkac:
         podatki = curr.fetchall()
         return podatki
 
-    # def najboljse_uvrstitve(self, conn):
+    # najboljša uvrstitev
+    def najboljse_uvrstitve(self, conn):
+        '''Poda podatke najboljše uvrstitve dirkača.'''
+        curr = conn.cursor()
+        poizvedba = ''''''
+        curr.excecute(poizvedba, (self.ime, self.priimek))
+        podatki = curr.fetchall()
+        return podatki
+    
     
     # Koliko uvrstitev na zmagovalni oder
-    
+    def zmagovalni_oder(self, conn):
+        '''Poda stevilo uvrstitev dirkaca na zmagovalni oder.'''
+        curr = conn.cursor()
+        poizvedba = ''''''
+        curr.execute(poizvedba, (self.ime, self.priimek))
+        podatki = curr.fetchall()
+        return podatki
     
