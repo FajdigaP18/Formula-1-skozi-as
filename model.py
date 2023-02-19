@@ -191,3 +191,38 @@ class Ekipa:
             sql += ' LIMIT ?'
             podatki.append(limit)
         yield from Ekipa.poisci_sql(sql, podatki)
+        
+class Dirkalisce:
+    def __init__(self, cid, ime, drzava):
+        self.id = cid
+        self.ime = ime
+        self.drzava = drzava
+        
+    def __str__(self):
+        return self.ime
+    
+    def poisci_sql(sql, podatki = None):
+        for poizvedba in conn.execute(sql, podatki):
+            yield Dirkalisce(*poizvedba)
+    
+    def pridobi_vsa_dirkalisca():
+        sql = '''
+                SELECT cid, ime, lokacija, drzava FROM dirkalisca
+                ORDER BY ime;'''
+        vsa_dirkalisca = conn.execute(sql).fetchall()
+        for dirkalisce in vsa_dirkalisca:
+            yield dirkalisce
+            
+    def poisci_po_imenu(ime, limit=None):
+        sql = '''
+            SELECT ime FROM dirkalisca
+            WHERE ime LIKE ?'''
+        podatki = ['%' + ime + '%']
+        if limit:
+            sql += ' LIMIT ?'
+            podatki.append(limit)
+        yield from Dirkalisce.poisci_sql(sql, podatki)
+    
+class Sezona:
+    def __init__(self, leto):
+        self.leto
