@@ -1,13 +1,60 @@
 % rebase('template/osnova.html', title='Ekipe')
 
-<h1>Vse ekipe so</h1>
+<h1 class="fs-5">Najbolj pogoste države in njihove ekipe</h1>
 
-<ul>
-    % for e in ekipe:
-    <li>
-        <div class="columns">
-            <div class="column">{{e[1]}}, {{e[2]}}</div>
-        </div>
-    </li>
-    % end
-</ul>
+<div class="row">
+    <div class="col-sm-4">
+        <ul>
+            <li>
+                <div class="column">
+                    <div class="column">
+                        <img src="static/img/german_flag.png" alt="German flag" height="35px" width="45px">
+                    </div>
+                </div>
+            </li>
+        % for n in nemci:
+        <li>
+            <div class="column">
+                <div class="column">{{n[1]}}</div>
+            </div>
+        </li>
+        % end
+        </ul>
+    </div>
+    <div class="col-sm-4">
+        <ul>
+            <li>
+                <div class="column">
+                    <div class="column">
+                        <img src="static/img/gb_flag.png" alt="German flag" height="35px" width="45px">
+                    </div>
+                </div>
+            </li>
+            % for a in anglezi:
+            <li>
+                <div class="column">
+                    <div class="column">{{a[1]}}</div>
+                </div>
+            </li>
+            % end
+        </ul>
+    </div>
+    <div class="col-sm-4">
+        <ul>
+            <li>
+                <div class="column">
+                    <div class="column">
+                        <img src="static/img/it_flag.png" alt="German flag" height="35px" width="45px">
+                    </div>
+                </div>
+            </li>
+            % for i in italjani:
+            <li>
+                <div class="column">
+                    <div class="column">{{i[1]}}</div>
+                </div>
+            </li>
+            % end
+        </ul>
+    </div>
+</div>

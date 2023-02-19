@@ -2,7 +2,8 @@ from bottle import *
 import model
 
 
-glavni_model = model.Model()
+# glavni_model = model.Model()
+dirkaci_model = model.Dirkac()
 ekipa_model = model.Ekipa()
 
 @route("/static/img/<filename>")
@@ -20,15 +21,13 @@ def serve_static_files_css(filename):
 @get("/")
 def glavna_stran():
 
-    podatki = glavni_model.dobi_vse_uporabnike()
-
-    return template("template/glavna.html", uporabniki=podatki)
+    return template("template/glavna.html")
 
 @get("/dirkaci")
 def dirkaci_stran():
     "Podatki pridobljeni iz modelov"
 
-    # podatki = 
+    # podatki = dirkaci_model.()
 
     return template("template/dirkaci.html")
 
@@ -40,8 +39,11 @@ def dirkalisca_stran():
 def ekipa_stran():
 
     podatki = ekipa_model.pridobi_vse_ekipe()
+    nemci = ekipa_model.pridobi_vse_nemce()
+    anglezi = ekipa_model.pridobi_vse_angleze()
+    italjani = ekipa_model.pridobi_vse_italijane()
 
-    return template("template/ekipa.html", ekipe=podatki)
+    return template("template/ekipa.html", ekipe=podatki, nemci=nemci, anglezi=anglezi, italjani=italjani)
 
 
 run(debug=True, reloader=True)

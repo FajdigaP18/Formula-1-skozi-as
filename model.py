@@ -31,7 +31,7 @@ class Model:
 
 class Dirkac:
     
-    def __init__(self, ide = None, ime = None, priimek = None):
+    def __init__(self, ide=None, ime=None, priimek=None):
         self.id = ide
         self.ime = ime
         self.priimek = priimek
@@ -54,45 +54,17 @@ class Dirkac:
                                   SELECT d.did
                                     FROM dirkaci d
                                    WHERE d.ime = ? AND 
-                                         d.priimek = ?);'''
+                                         d.priimek = ?)'''
         curr.excecute(poizvedba,(self.ime, self.priimek))
         podatki = curr.fetchall()
         return podatki
 
     # najboljša uvrstitev
-    def najboljsa_uvrstitev(self, conn):
+    def najboljse_uvrstitve(self, conn):
         '''Poda podatke najboljše uvrstitve dirkača.'''
         curr = conn.cursor()
-        poizvedba = '''SELECT dirkaci.ime,
-                              dirkaci.priimek,
-                              rezultati.pozicija,
-                              ekipa.ime,
-                              dirkalisca.ime,
-                              dirka.datum
-                         FROM dirkaci
-                              INNER JOIN
-                              rezultati ON dirkaci.did = rezultati.did
-                              INNER JOIN
-                              ekipa ON ekipa.eid = rezultati.cid
-                              INNER JOIN
-                              dirka ON dirka.raceid = rezultati.rid
-                              INNER JOIN
-                              dirkalisca ON dirka.dirkalisce = dirkalisca.cid
-                        WHERE dirkaci.ime = ? AND 
-                              dirkaci.priimek = ? AND 
-                              rezultati.pozicija = (
-                                                       SELECT min(rezultati.pozicija) 
-                                                         FROM rezultati
-                                                        GROUP BY rezultati.did
-                                                       HAVING rezultati.did = (
-                                                                                  SELECT dirkaci.did
-                                                                                    FROM dirkaci
-                                                                                   WHERE dirkaci.ime = ? AND 
-                                                                                         dirkaci.priimek = ?
-                                                                              )
-                                                   )
-                        ORDER BY dirka.datum DESC;'''
-        curr.excecute(poizvedba, (self.ime, self.priimek, self.ime, self.priimek))
+        poizvedba = ''''''
+        curr.excecute(poizvedba, (self.ime, self.priimek))
         podatki = curr.fetchall()
         return podatki
     
@@ -101,16 +73,7 @@ class Dirkac:
     def zmagovalni_oder(self, conn):
         '''Poda stevilo uvrstitev dirkaca na zmagovalni oder.'''
         curr = conn.cursor()
-        poizvedba = '''SELECT dirkaci.ime,
-                               dirkaci.priimek,
-                               count( * ) AS oder_za_zmagovalce
-                          FROM dirkaci
-                               INNER JOIN
-                               rezultati ON dirkaci.did = rezultati.did
-                         WHERE rezultati.pozicija < 4
-                         GROUP BY dirkaci.did
-                        HAVING dirkaci.ime = ? AND 
-                               dirkaci.priimek = '?'''
+        poizvedba = ''''''
         curr.execute(poizvedba, (self.ime, self.priimek))
         podatki = curr.fetchall()
         return podatki
@@ -134,8 +97,38 @@ class Ekipa:
     @staticmethod
     def pridobi_vse_ekipe():
         sql = '''
-                SELECT eid, ime, nationality FROM ekipa
-                ORDER BY ime;'''
+                SELECT eid, team_name, nationality FROM ekipa
+                ORDER BY team_name;'''
+        ekipe = conn.execute(sql).fetchall()
+        for ekipa in ekipe:
+            yield ekipa
+
+    @staticmethod
+    def pridobi_vse_nemce():
+        sql = '''
+                SELECT eid, team_name FROM ekipa
+                WHERE nationality = 'German'
+                ORDER BY team_name;'''
+        ekipe = conn.execute(sql).fetchall()
+        for ekipa in ekipe:
+            yield ekipa
+    
+    @staticmethod
+    def pridobi_vse_angleze():
+        sql = '''
+                SELECT eid, team_name FROM ekipa
+                WHERE nationality = 'British'
+                ORDER BY team_name;'''
+        ekipe = conn.execute(sql).fetchall()
+        for ekipa in ekipe:
+            yield ekipa
+    
+    @staticmethod
+    def pridobi_vse_italijane():
+        sql = '''
+                SELECT eid, team_name FROM ekipa
+                WHERE nationality = 'Italian'
+                ORDER BY team_name;'''
         ekipe = conn.execute(sql).fetchall()
         for ekipa in ekipe:
             yield ekipa
@@ -143,8 +136,8 @@ class Ekipa:
     @staticmethod
     def poisci_po_imenu(ime, limit=None):
         sql = '''
-            SELECT ime FROM ekipa
-            WHERE ime LIKE ?'''
+            SELECT team_name FROM ekipa
+            WHERE team_name LIKE ?'''
         podatki = ['%' + ime + '%']
         if limit:
             sql += ' LIMIT ?'
@@ -154,12 +147,10 @@ class Ekipa:
     @staticmethod
     def poisci_po_nacionalnosti(nacija, limit=None):
         sql = '''
-            SELECT drzava FROM ekipa
-            WHERE drzava LIKE ?'''
+            SELECT nationality FROM ekipa
+            WHERE nationality LIKE ?'''
         podatki = ['%' + nacija + '%']
         if limit:
             sql += ' LIMIT ?'
             podatki.append(limit)
         yield from Ekipa.poisci_sql(sql, podatki)
-
-
