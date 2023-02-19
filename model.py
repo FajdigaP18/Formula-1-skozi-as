@@ -39,12 +39,17 @@ class Dirkac:
     def __str__(self):
         return f'{self.ime} {self.priimek}'
     
+    @staticmethod
+    def poisci_sql(sql, podatki=None):
+        for poizvedba in conn.execute(sql, podatki):
+            yield Dirkac(*poizvedba)
+    
     # vse ekipe, za katere je dirkal 
-    # NISM SE PREVERILA CE DELUJE !!!!!!!!!!!
+    # NISM SE PREVERILA CE DELUJE !!!!!!!!!!!        
+    @staticmethod
     def vse_ekipe(self, conn):
         '''Poda tabelo vseh ekip v katerih je dirkal dirkač.'''
-        curr = conn.cursor()
-        poizvedba = '''SELECT DISTINCT ime
+        sql = '''SELECT DISTINCT ime
                          FROM ekipa
                               INNER JOIN
                               rezultati ON ekipa.eid = rezultati.cid
@@ -55,15 +60,19 @@ class Dirkac:
                                     FROM dirkaci d
                                    WHERE d.ime = ? AND 
                                          d.priimek = ?)'''
-        curr.excecute(poizvedba,(self.ime, self.priimek))
-        podatki = curr.fetchall()
-        return podatki
+        podatki = (self.ime, self.priimek)
+        ekipe = conn.excecute(sql,podatki).fatchall()
+        for ekipa in ekipe:
+            yield ekipa
+
+#        podatki = curr.fetchall()
+#        return podatki
 
     # najboljša uvrstitev
     def najboljse_uvrstitve(self, conn):
         '''Poda podatke najboljše uvrstitve dirkača.'''
-        curr = conn.cursor()
-        poizvedba = '''SELECT dirkaci.ime,
+#        curr = conn.cursor()
+        sql = '''SELECT dirkaci.ime,
                               dirkaci.priimek,
                               rezultati.pozicija,
                               ekipa.ime,
@@ -92,16 +101,17 @@ class Dirkac:
                                                                               )
                                                    )
                         ORDER BY dirka.datum DESC;'''
-        curr.excecute(poizvedba, (self.ime, self.priimek))
-        podatki = curr.fetchall()
-        return podatki
-    
-    
+        podatki = (self.ime, self.priimek, self.ime, self.priimek)
+        yield conn.execute(sql, podatki)
+#        curr.excecute(poizvedba, (self.ime, self.priimek))
+#        podatki = curr.fetchall()
+#        return podatki
+        
     # Koliko uvrstitev na zmagovalni oder
     def zmagovalni_oder(self, conn):
         '''Poda stevilo uvrstitev dirkaca na zmagovalni oder.'''
-        curr = conn.cursor()
-        poizvedba = '''SELECT dirkaci.ime,
+#        curr = conn.cursor()
+        sql = '''SELECT dirkaci.ime,
                                dirkaci.priimek,
                                count( * ) AS oder_za_zmagovalce
                           FROM dirkaci
@@ -111,9 +121,10 @@ class Dirkac:
                          GROUP BY dirkaci.did
                         HAVING dirkaci.ime = ? AND 
                                dirkaci.priimek = ?'''
-        curr.execute(poizvedba, (self.ime, self.priimek))
-        podatki = curr.fetchall()
-        return podatki
+        podatki = (self.ime, self.priimek)
+        yield conn.execute(sql, (self.ime,podatki))
+#         podatki = curr.fetchall()
+#         return podatki
     
 class Ekipa:
 
@@ -134,7 +145,8 @@ class Ekipa:
     @staticmethod
     def pridobi_vse_ekipe():
         sql = '''
-                SELECT eid, ime, nationality FROM ekipa
+                SELECT eid, ime, drzava
+                FROM ekipa
                 ORDER BY ime;'''
         ekipe = conn.execute(sql).fetchall()
         for ekipa in ekipe:
@@ -229,7 +241,7 @@ class Dirkalisce:
     
     @staticmethod
     def najveckrat_zmagal():
-        '''Vrne dirkalisce in osebo ki je najveckarat zmagala na tem dirkaliscu ter stevilo zmag.'''
+        '''Poisce dirkalisce in osebo ki je najveckarat zmagala na tem dirkaliscu ter stevilo zmag.'''
         sql = '''SELECT tabela.proga,
                        tabela.ime,
                        tabela.priimek,
@@ -259,10 +271,31 @@ class Dirkalisce:
                  order by tabela.proga;'''
         vsa_dirkalisca = conn.execute(sql).fetchall()
         for dirkalisce in vsa_dirkalisca:
-            yield dirkalisce
-        
-    
+            yield dirkalisce        
     
 class Sezona:
     def __init__(self, leto):
         self.leto
+        
+    def __str__(self):
+        return self.leto
+    
+    @staticmethod
+    def poisci_sql(sql, podatki = None):
+        for poizvedba in conn.execute(sql, podatki):
+            yield Dirkalisce(*poizvedba)
+    
+    @staticmethod
+    def pridobi_vse_sezone():
+        '''Poisce vse sezone.'''
+        sql = '''
+                SELECT DISTINCT strftime('%Y', dirka.datum) AS leto
+                  FROM dirka
+                 ORDER BY leto DESC;'''
+        vse_sezone = conn.execute(sql).fetchall()
+        for sezona in vse_sezone:
+            yield sezona
+    
+    
+            
+    
