@@ -55,7 +55,7 @@ class Dirkac:
                                     FROM dirkaci d
                                    WHERE d.ime = ? AND 
                                          d.priimek = ?)'''
-        curr.excecute(poizvedba,[self.ime, self.priimek])
+        curr.excecute(poizvedba,(self.ime, self.priimek))
         podatki = curr.fetchall()
         return podatki
 
