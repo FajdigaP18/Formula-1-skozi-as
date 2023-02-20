@@ -3,14 +3,11 @@ import csv
 
 def napolni_dirkaci():
     '''Napolni tabelo dirkaci'''
-    with open("archive/drivers.csv", "r") as dirkaci:
+    with open("archive/drivers.csv", "r", encoding = 'utf-8') as dirkaci:
         csv_reader = csv.reader(dirkaci, delimiter = ',')
         naslovi_st = next(csv_reader)
         seznam = []
-        caunt = 0
         for vrstica in csv_reader:
-            if caunt == 855: break
-            caunt += 1
             tupl = tuple([vrstica[0]] + vrstica[4:-1])
             seznam.append(tupl)
         sql = "INSERT INTO dirkaci (did, ime, priimek, rojstvo, drzava) VALUES (?, ?, ?, ?, ?)"
@@ -20,7 +17,7 @@ def napolni_dirkaci():
 
 def napolni_dirkalisca():
     '''Napolni tabelo dirkalisca'''
-    with open("archive/circuits.csv", 'r') as dirkalisca:
+    with open("archive/circuits.csv", "r", encoding = 'utf-8') as dirkalisca:
         csv_reader = csv.reader(dirkalisca, delimiter=',')
         naslovi_st = next(csv_reader)
         seznam = []
@@ -46,7 +43,7 @@ def napolni_dirka():
 
 def napolni_ekipa():
     '''Napolni tabelo ekipa'''
-    with open("archive/constructors.csv", "r") as ekipa:
+    with open("archive/constructors.csv", "r", encoding = 'utf-8') as ekipa:
         csv_reader = csv.reader(ekipa, delimiter = ',')
         naslovi_st = next(csv_reader)
         seznam = []

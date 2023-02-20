@@ -1,2 +1,13 @@
 % rebase('template/osnova.html', title='Dirkališča')
 
+<h1>Vsa dirkalisca so</h1>
+
+<ul>
+    % for pr in dirkalisca:
+    <li>
+        <div class="columns">
+            <div class="column"> {{pr[0]}} {{ pr[1] }}, {{ pr[2] }}, {{ pr[3] }}</div>
+        </div>
+    </li>
+    % end
+</ul>

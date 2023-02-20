@@ -42,7 +42,8 @@ def dirkaci_detajli(did):
 @get("/dirkalisca")
 def dirkalisca_stran():
 
-    dirkalisca = dirkalisca_model.pridobi_vsa_dirkalisca()
+#     dirkalisca = dirkalisca_model.pridobi_vsa_dirkalisca()
+    dirkalisca = dirkalisca_model.najveckrat_zmagal()
 
     return template("template/dirkalisca.html", dirkalisca=dirkalisca)
 

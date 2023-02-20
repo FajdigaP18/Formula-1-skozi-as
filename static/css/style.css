@@ -1,4 +1,10 @@
 
+h1 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+}
+
 .moja-rdeca {
     color: red;
 }

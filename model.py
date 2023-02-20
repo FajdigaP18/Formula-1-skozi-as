@@ -20,14 +20,16 @@ stare_v_novo = {'Tyrrell':'Mercedes', 'BAR':'Mercedes', 'Honda':'Mercedes', 'Bra
       
 class Dirkac:
     
-    def __init__(self, ide=None, ime=None, priimek=None):
+    def __init__(self, ide=None, ime=None, priimek=None, drzava = None, rojstvo = None):
         self.id = ide
         self.ime = ime
         self.priimek = priimek
+        self.drzava = drzava
+        self.rojstvo = rojstvo
         
     def __str__(self):
-        return f'{self.ime} {self.priimek}'
-    
+        return f'{self.ime} {self.priimek}, {self.drzava}, {self.rojstvo}'
+
     @staticmethod
     def dobi_dirkaca(did):
         with conn:
@@ -59,7 +61,8 @@ class Dirkac:
     
     # vse ekipe, za katere je dirkal 
     # NISM SE PREVERILA CE DELUJE !!!!!!!!!!!
-    def vse_ekipe(self, conn):
+    @staticmethod
+    def vse_ekipe(did):
         '''Poda tabelo vseh ekip v katerih je dirkal dirkač.'''
         sql = '''SELECT DISTINCT ime
                          FROM ekipa
@@ -67,13 +70,9 @@ class Dirkac:
                               rezultati ON ekipa.eid = rezultati.cid
                               INNER JOIN
                               dirkaci ON dirkaci.did = rezultati.did
-                        WHERE dirkaci.did IN (
-                                  SELECT d.did
-                                    FROM dirkaci d
-                                   WHERE d.ime = ? AND 
-                                         d.priimek = ?)'''
-        podatki = (self.ime, self.priimek)
-        ekipe = conn.excecute(sql,podatki).fatchall()
+                        WHERE dirkaci.did = ?'''
+        #podatki = (self.ime, self.priimek)
+        ekipe = conn.excecute(sql,[did]).fatchall()
         for ekipa in ekipe:
             yield ekipa
 
@@ -81,7 +80,7 @@ class Dirkac:
 #        return podatki
 
     # najboljša uvrstitev
-    def najboljse_uvrstitve(self, conn):
+    def najboljse_uvrstitve(ime, priimek):
         '''Poda podatke najboljše uvrstitve dirkača.'''
 #        curr = conn.cursor()
         sql = '''SELECT dirkaci.ime,
@@ -116,14 +115,14 @@ class Dirkac:
         # podatki2 = conn.execute(sql).fetchall()
         # for pod in podatki2:
         #    yield pod
-        podatki = (self.ime, self.priimek, self.ime, self.priimek)
-        yield conn.execute(sql, podatki)
+        podatki = (ime, priimek, ime, priimek)
+        yield conn.execute(sql, podatki).fetchall()
 #        curr.excecute(poizvedba, (self.ime, self.priimek))
 #        podatki = curr.fetchall()
 #        return podatki
         
     # Koliko uvrstitev na zmagovalni oder
-    def zmagovalni_oder(self, conn):
+    def zmagovalni_oder(did):
         '''Poda stevilo uvrstitev dirkaca na zmagovalni oder.'''
 #        curr = conn.cursor()
         sql = '''SELECT dirkaci.ime,
@@ -134,10 +133,8 @@ class Dirkac:
                                rezultati ON dirkaci.did = rezultati.did
                          WHERE rezultati.pozicija < 4
                          GROUP BY dirkaci.did
-                        HAVING dirkaci.ime = ? AND 
-                               dirkaci.priimek = ?'''
-        podatki = (self.ime, self.priimek)
-        yield conn.execute(sql, (self.ime,podatki))
+                        HAVING dirkaci.did = did'''
+        yield conn.execute(sql, [did]).fetchone()
 #         podatki = curr.fetchall()
 #         return podatki
     
@@ -308,6 +305,25 @@ class Sezona:
         vse_sezone = conn.execute(sql).fetchall()
         for sezona in vse_sezone:
             yield sezona
+            
+    @staticmethod
+    def rezultati_sezona(sezona):
+        '''Pridobi koncne rezultate sezone.'''
+        sql = '''SELECT rezultati.did,
+                      dirkaci.ime,
+                      dirkaci.priimek,
+                      sum(rezultati.tocke) AS tocke
+                 FROM rezultati
+                      inner JOIN
+                      dirkaci ON rezultati.did = dirkaci.did
+                      INNER JOIN
+                      dirka ON dirka.raceid = rezultati.rid
+                WHERE strftime('%Y', dirka.datum) = ?
+                GROUP BY rezultati.did
+                ORDER BY tocke DESC;'''
+        vsi_rezultati = conn.execute(sql, sezona).fetchall()
+        for rezultat in vsi_rezultati:
+            yield rezultat
     
     
             
