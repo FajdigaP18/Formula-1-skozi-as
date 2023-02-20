@@ -1,0 +1,23 @@
+% rebase('template/osnova.html', title='Dirkači')
+
+<div class="row">
+    <div class="col-md-4">
+      <img src="static/img/profilepic.jpg" class="img-responsive" alt="Profile Picture">
+    </div>
+    <div class="col-md-8">
+      <h1>{{ dirkac }}</h1>
+      <p>{{ ekipe }}</p>
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>Njegova najboljša uverstitev:</td>
+            <td>{{ uvrstitve }}</td>
+          </tr>
+          <tr>
+            <td>Kolikokrat je bil na zmagovalnem odru:</td>
+            <td>{{ oder }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

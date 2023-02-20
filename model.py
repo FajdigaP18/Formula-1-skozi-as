@@ -26,8 +26,12 @@ class Dirkac:
         self.priimek = priimek
         self.drzava = drzava
         self.rojstvo = rojstvo
+        self.drzava = drzava
+        self.rojstvo = rojstvo
         
     def __str__(self):
+        return f'{self.ime} {self.priimek}, {self.drzava}, {self.rojstvo}'
+
         return f'{self.ime} {self.priimek}, {self.drzava}, {self.rojstvo}'
 
     @staticmethod
@@ -53,7 +57,8 @@ class Dirkac:
         sql = '''SELECT ime,
                      priimek,
                      dirkaci.drzava,
-                     dirkaci.rojstvo
+                     dirkaci.rojstvo,
+                     did
                 FROM dirkaci;'''
         vsi_dirkaci = conn.execute(sql).fetchall()
         for dirkac in vsi_dirkaci:
@@ -61,6 +66,8 @@ class Dirkac:
     
     # vse ekipe, za katere je dirkal 
     # NISM SE PREVERILA CE DELUJE !!!!!!!!!!!
+    @staticmethod
+    def vse_ekipe(did):
     @staticmethod
     def vse_ekipe(did):
         '''Poda tabelo vseh ekip v katerih je dirkal dirkač.'''
@@ -72,7 +79,7 @@ class Dirkac:
                               dirkaci ON dirkaci.did = rezultati.did
                         WHERE dirkaci.did = ?'''
         #podatki = (self.ime, self.priimek)
-        ekipe = conn.excecute(sql,[did]).fatchall()
+        ekipe = conn.execute(sql,[did]).fetchall()
         for ekipa in ekipe:
             yield ekipa
 
@@ -80,6 +87,7 @@ class Dirkac:
 #        return podatki
 
     # najboljša uvrstitev
+    @staticmethod
     def najboljse_uvrstitve(ime, priimek):
         '''Poda podatke najboljše uvrstitve dirkača.'''
 #        curr = conn.cursor()
@@ -122,6 +130,7 @@ class Dirkac:
 #        return podatki
         
     # Koliko uvrstitev na zmagovalni oder
+    @staticmethod
     def zmagovalni_oder(did):
         '''Poda stevilo uvrstitev dirkaca na zmagovalni oder.'''
 #        curr = conn.cursor()

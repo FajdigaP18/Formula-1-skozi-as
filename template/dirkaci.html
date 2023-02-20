@@ -2,12 +2,23 @@
 
 <h1>Vsi dirkaci so</h1>
 
-<ul>
-    % for up in dirkaci:
-    <li>
-        <div class="columns">
-            <div class="column">{{ up[0] }}. {{ up[1] }} {{ up[2] }}, {{ up[3] }}, {{ up[4] }}</div>
-        </div>
-    </li>
-    % end
-</ul>
+<table class="table">
+    <thead>
+      <tr>
+        <th>PRIIMEK</th>
+        <th>IME</th>
+        <th>DRŽAVLJANSTVO</th>
+        <th>DATUM ROJSTVA</th>
+      </tr>
+    </thead>
+    <tbody>
+      % for d in dirkaci:
+      <tr onclick="window.location.href='/dirkaci/{{ d[4] }}';" style="cursor: pointer;">
+        <td>{{ d[1] }}</td>
+        <td>{{ d[0] }}</td>
+        <td>{{ d[2] }}</td>
+        <td>{{ d[3] }}</td>
+      </tr>
+      % end
+    </tbody>
+  </table>
