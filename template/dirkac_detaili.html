@@ -1,2 +1,56 @@
 % rebase('template/osnova.html', title='Dirkači')
 
+<div class="row">
+    <div class="col-md-4">
+      <img src="static/img/profilepic.jpg" class="img-responsive" alt="Profile Picture">
+    </div>
+    <div class="col-md-8">
+      <h1>{{ dirkac }}</h1>
+
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>Narodnost:</td>
+            <td>
+                % for k in drzavljanstvo:
+                <p> {{k[4]}}</p>
+                % end
+            </td>
+
+          </tr>
+          <tr>
+            <td>Datum rojstva:</td>
+            <td>
+                % for d in datum:
+                <p> {{d[3].split('-')[2]}}.{{d[3].split('-')[1]}}.{{d[3].split('-')[0]}} </p>
+                % end
+            </td>
+          </tr>
+          <tr>
+            <td>Ekipe:</td>
+            <td>
+                % for e in ekipe:
+                <li> {{ e[0] }} </li>
+                % end
+            </td>
+          </tr>
+          <tr>
+            <td>Kolikokrat je bil na zmagovalnem odru:</td>
+            % for o in oder:
+            <td>{{ o[2] }}</td>
+            % end
+          </tr>
+          <tr>
+            <td>Njegova najboljša uverstitev/e:</td>
+            % for u in uvrstitve:
+            <td>
+                % for dir in u:
+                <li>{{ dir[2] }}. {{ dir[3] }}, {{ dir[4] }}, {{ dir[5] }}</li>
+                % end
+            </td>
+            % end
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

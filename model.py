@@ -28,9 +28,8 @@ class Dirkac:
         self.rojstvo = rojstvo
         
     def __str__(self):
-        return f'{self.ime} {self.priimek}, {self.drzava}, {self.rojstvo}'
+        return f'{self.ime} {self.priimek}'
 
-        return f'{self.ime} {self.priimek}, {self.drzava}, {self.rojstvo}'
 
     @staticmethod
     def dobi_dirkaca(did):
@@ -41,7 +40,6 @@ class Dirkac:
                 WHERE did=?
             """, [did])
             podatki = cursor.fetchone()
-            
             return Dirkac(podatki[0], podatki[1], podatki[2])
     
     @staticmethod
@@ -68,7 +66,7 @@ class Dirkac:
     @staticmethod
     def vse_ekipe(did):
         '''Poda tabelo vseh ekip v katerih je dirkal dirkač.'''
-        sql = '''SELECT DISTINCT ime
+        sql = '''SELECT DISTINCT ekipa.ime
                          FROM ekipa
                               INNER JOIN
                               rezultati ON ekipa.eid = rezultati.cid
@@ -77,6 +75,7 @@ class Dirkac:
                         WHERE dirkaci.did = ?'''
         #podatki = (self.ime, self.priimek)
         ekipe = conn.execute(sql,[did]).fetchall()
+#        return ekipe
         for ekipa in ekipe:
             yield ekipa
 
@@ -88,7 +87,7 @@ class Dirkac:
     def najboljse_uvrstitve(ime, priimek):
         '''Poda podatke najboljše uvrstitve dirkača.'''
 #        curr = conn.cursor()
-        sql = '''SELECT dirkaci.ime,
+        sql = '''SELECT DISTINCT dirkaci.ime,
                               dirkaci.priimek,
                               rezultati.pozicija,
                               ekipa.ime,
@@ -133,13 +132,15 @@ class Dirkac:
 #        curr = conn.cursor()
         sql = '''SELECT dirkaci.ime,
                                dirkaci.priimek,
-                               count( * ) AS oder_za_zmagovalce
+                               count( * ) AS oder_za_zmagovalce,
+                               dirkaci.rojstvo,
+                               dirkaci.drzava
                           FROM dirkaci
                                INNER JOIN
                                rezultati ON dirkaci.did = rezultati.did
                          WHERE rezultati.pozicija < 4
                          GROUP BY dirkaci.did
-                        HAVING dirkaci.did = did'''
+                        HAVING dirkaci.did = ?'''
         yield conn.execute(sql, [did]).fetchone()
 #         podatki = curr.fetchall()
 #         return podatki

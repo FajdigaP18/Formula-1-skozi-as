@@ -39,8 +39,11 @@ def dirkaci_detajli(did):
     vse_ekipe = dirkaci_model.vse_ekipe(did)
     najbol_uvrstitve = dirkaci_model.najboljse_uvrstitve(dirkac.ime, dirkac.priimek)
     zmag_oder = dirkaci_model.zmagovalni_oder(did) 
+    datum = dirkaci_model.zmagovalni_oder(did)
+    drzav = dirkaci_model.zmagovalni_oder(did)
 
-    return template("template/dirkac_detaili.html", dirkac=dirkac, ekipe=vse_ekipe, uvrstitve=najbol_uvrstitve, oder=zmag_oder)
+    return template("template/dirkac_detaili.html", dirkac=dirkac, ekipe=vse_ekipe, uvrstitve=najbol_uvrstitve, oder=zmag_oder, datum=datum, drzavljanstvo=drzav)
+    #return template("template/dirkac_detaili.html", dirkac=dirkac, ekipe=vse_ekipe, soder=zmag_oder)
 
 @get("/dirkalisca")
 def dirkalisca_stran():
