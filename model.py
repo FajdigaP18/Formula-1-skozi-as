@@ -249,6 +249,16 @@ class Dirkalisce:
     def poisci_sql(sql, podatki = None):
         for poizvedba in conn.execute(sql, podatki):
             yield Dirkalisce(*poizvedba)
+            
+    @staticmethod
+    def pridobi_dirkalisce(cid):
+        sql = '''SELECT dirkalisca.cid,
+                      dirkalisca.ime,
+                      dirkalisca.drzava
+                 FROM dirkalisca
+                WHERE cid = ?;'''
+        podatki = conn.execute(sql, [cid]).fetchall()
+        yield Dirkalisce(podatki)
     
     @staticmethod
     def pridobi_vsa_dirkalisca():
@@ -302,8 +312,51 @@ class Dirkalisce:
                  order by tabela.proga;'''
         vsa_dirkalisca = conn.execute(sql).fetchall()
         for dirkalisce in vsa_dirkalisca:
-            yield dirkalisce        
-    
+            yield dirkalisce
+    @staticmethod        
+    def kdo_najveckrat_zmagal(proga_id):
+        '''Pridobi podatke o tem kdo je na dirkaliscu prog_id najveckrat zmagal
+        ter kolikokrat je zmagal (proga_id, ime_dirkalisca, kdo_ime, kdo_priimek, st_zmag)'''  
+        sql = '''SELECT tabela1.proga_id,
+                       tabela1.proga,
+                       tabela1.najboljsi_ime,
+                       tabela1.najboljsi_priimek,
+                       tabela1.stevilo_zmag
+                  FROM (
+                           SELECT tabela.proga_id AS proga_id,
+                                  tabela.proga AS proga,
+                                  tabela.ime AS najboljsi_ime,
+                                  tabela.priimek AS najboljsi_priimek,
+                                  max(tabela.st) AS stevilo_zmag
+                             FROM (
+                                      SELECT rezultati.did,
+                                             dirkaci.did,
+                                             dirkaci.ime AS ime,
+                                             dirkaci.priimek AS priimek,
+                                             dirka.dirkalisce,
+                                             dirkalisca.cid AS proga_id,
+                                             dirkalisca.ime AS proga,
+                                             count( * ) AS st
+                                        FROM rezultati
+                                             INNER JOIN
+                                             dirka ON dirka.raceid = rezultati.rid
+                                             INNER JOIN
+                                             dirkalisca ON dirkalisca.cid = dirka.dirkalisce
+                                             INNER JOIN
+                                             dirkaci ON dirkaci.did = rezultati.did
+                                       WHERE rezultati.pozicija = 1
+                                       GROUP BY rezultati.did,
+                                                dirka.dirkalisce
+                                  )
+                                  tabela
+                            GROUP BY dirkalisce
+                            ORDER BY tabela.proga
+                       )
+                       tabela1
+                 WHERE tabela1.proga_id = ?;''' 
+        podatki = conn.execute(sql, [proga_id]).fetchone()
+        yield podatki     
+
 class Sezona:
     def __init__(self, leto=None):
         self.leto = leto
@@ -327,7 +380,6 @@ class Sezona:
         for sezona in vse_sezone:
             yield sezona
             
-    @staticmethod
     def rezultati_sezona(sezona):
         '''Pridobi koncne rezultate sezone.'''
         sql = '''SELECT rezultati.did,
