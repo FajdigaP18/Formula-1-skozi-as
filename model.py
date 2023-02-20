@@ -30,17 +30,17 @@ class Dirkac:
     def __str__(self):
         return f'{self.ime} {self.priimek}'
 
+
     @staticmethod
     def dobi_dirkaca(did):
         with conn:
             cursor = conn.execute("""
-                SELECT did, ime, priimek, drzava, rojstvo 
+                SELECT did, ime, priimek 
                 FROM dirkaci
                 WHERE did=?
             """, [did])
             podatki = cursor.fetchone()
-            
-            return Dirkac(podatki[0], podatki[1], podatki[2], podatki[3], podatki[4])
+            return Dirkac(podatki[0], podatki[1], podatki[2])
     
     @staticmethod
     def poisci_sql(sql, podatki=None):
@@ -223,10 +223,9 @@ class Ekipa:
         yield from Ekipa.poisci_sql(sql, podatki)
         
 class Dirkalisce:
-    def __init__(self, cid=None, ime=None,lokacija=None, drzava=None):
+    def __init__(self, cid=None, ime=None, drzava=None):
         self.id = cid
         self.ime = ime
-        self.lokacija = lokacija
         self.drzava = drzava
     
     def __str__(self):
@@ -236,18 +235,6 @@ class Dirkalisce:
     def poisci_sql(sql, podatki = None):
         for poizvedba in conn.execute(sql, podatki):
             yield Dirkalisce(*poizvedba)
-
-    @staticmethod
-    def dobi_dirkalisce(cid):
-        with conn:
-            cursor = conn.execute("""
-                SELECT cid, ime, lokacija, drzava 
-                FROM dirkalisca
-                WHERE cid=?
-            """, [cid])
-            podatki = cursor.fetchone()
-            
-            return Dirkalisce(podatki[0], podatki[1], podatki[2], podatki[3])
     
     @staticmethod
     def pridobi_vsa_dirkalisca():
