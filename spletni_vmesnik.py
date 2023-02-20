@@ -61,7 +61,6 @@ def dirkalisca_detajli(did):
 
 @get("/ekipa")
 def ekipa_stran():
-
     podatki = ekipa_model.pridobi_vse_ekipe()
     nemci = ekipa_model.pridobi_vse_nemce()
     anglezi = ekipa_model.pridobi_vse_angleze()
@@ -73,7 +72,8 @@ def ekipa_stran():
 def ekipe_detajli(eid):
     ekipa = ekipa_model.pridobi_ekipo(eid)
     dirkaci = ekipa_model.ekipa_vsi_dirkaci(eid)
-    return template("template/ekipa_detaili.html", ekipa=ekipa, dirkaci=dirkaci)
+    sezone = ekipa_model.ekipa_sezone(eid)
+    return template("template/ekipa_detaili.html", ekipa=ekipa, dirkaci=dirkaci, sezone=sezone)
 
 run(debug=True, reloader=True)
 

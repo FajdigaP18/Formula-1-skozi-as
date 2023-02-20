@@ -235,7 +235,20 @@ class Ekipa:
         podatki = conn.execute(sql, [eid]).fetchall()
         for dirkac in podatki:
             yield dirkac
-        
+            
+    @staticmethod
+    def ekipa_sezone(eid):
+        '''Pridobi vse sezone v katerih je sodelovala ta ekipa'''
+        sql = '''select tabela.leto from (SELECT DISTINCT cid as cid,
+                                strftime('%Y', dirka.datum) AS leto
+                  FROM rezultati
+                       INNER JOIN
+                       dirka ON dirka.raceid = rezultati.rid) tabela where cid = ? ;'''
+        podatki = conn.execute(sql, [eid]).fetchall()
+        for leto in podatki:
+            yield leto
+    
+            
 class Dirkalisce:
     def __init__(self, cid=None, ime=None, drzava=None):
         self.id = cid
@@ -257,7 +270,7 @@ class Dirkalisce:
                       dirkalisca.drzava
                  FROM dirkalisca
                 WHERE cid = ?;'''
-        podatki = conn.execute(sql, [cid]).fetchall()
+        podatki = conn.execute(sql, [cid]).fetchone()
         yield Dirkalisce(podatki)
     
     @staticmethod
@@ -313,6 +326,7 @@ class Dirkalisce:
         vsa_dirkalisca = conn.execute(sql).fetchall()
         for dirkalisce in vsa_dirkalisca:
             yield dirkalisce
+    
     @staticmethod        
     def kdo_najveckrat_zmagal(proga_id):
         '''Pridobi podatke o tem kdo je na dirkaliscu prog_id najveckrat zmagal
@@ -355,7 +369,7 @@ class Dirkalisce:
                        tabela1
                  WHERE tabela1.proga_id = ?;''' 
         podatki = conn.execute(sql, [proga_id]).fetchone()
-        yield podatki     
+        yield podatki  
 
 class Sezona:
     def __init__(self, leto=None):
