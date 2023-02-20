@@ -60,8 +60,6 @@ class Dirkac:
         for dirkac in vsi_dirkaci:
             yield dirkac
     
-    # vse ekipe, za katere je dirkal 
-    # NISM SE PREVERILA CE DELUJE !!!!!!!!!!!
 
     @staticmethod
     def vse_ekipe(did):
@@ -73,20 +71,16 @@ class Dirkac:
                               INNER JOIN
                               dirkaci ON dirkaci.did = rezultati.did
                         WHERE dirkaci.did = ?'''
-        #podatki = (self.ime, self.priimek)
+
         ekipe = conn.execute(sql,[did]).fetchall()
 #        return ekipe
         for ekipa in ekipe:
             yield ekipa
 
-#        podatki = curr.fetchall()
-#        return podatki
-
     # najboljša uvrstitev
     @staticmethod
     def najboljse_uvrstitve(ime, priimek):
         '''Poda podatke najboljše uvrstitve dirkača.'''
-#        curr = conn.cursor()
         sql = '''SELECT DISTINCT dirkaci.ime,
                               dirkaci.priimek,
                               rezultati.pozicija,
@@ -116,20 +110,15 @@ class Dirkac:
                                                                               )
                                                    )
                         ORDER BY dirka.datum DESC;'''
-        # podatki2 = conn.execute(sql).fetchall()
-        # for pod in podatki2:
-        #    yield pod
+
         podatki = (ime, priimek, ime, priimek)
         yield conn.execute(sql, podatki).fetchall()
-#        curr.excecute(poizvedba, (self.ime, self.priimek))
-#        podatki = curr.fetchall()
-#        return podatki
+
         
     # Koliko uvrstitev na zmagovalni oder
     @staticmethod
     def zmagovalni_oder(did):
         '''Poda stevilo uvrstitev dirkaca na zmagovalni oder.'''
-#        curr = conn.cursor()
         sql = '''SELECT dirkaci.ime,
                                dirkaci.priimek,
                                count( * ) AS oder_za_zmagovalce,
@@ -142,8 +131,7 @@ class Dirkac:
                          GROUP BY dirkaci.did
                         HAVING dirkaci.did = ?'''
         yield conn.execute(sql, [did]).fetchone()
-#         podatki = curr.fetchall()
-#         return podatki
+
     
 class Ekipa:
 
@@ -221,6 +209,17 @@ class Ekipa:
             sql += ' LIMIT ?'
             podatki.append(limit)
         yield from Ekipa.poisci_sql(sql, podatki)
+    
+    @staticmethod
+    def pridobi_ekipo(eid):
+        sql = '''SELECT eid,
+                      ime,
+                      drzava
+                 FROM ekipa
+                WHERE eid = 1;
+        '''
+        podatki = conn.execute(sql, [eid]).fetchone()
+        return Ekipa(podatki[0], podatki[1], podatki[2])
         
 class Dirkalisce:
     def __init__(self, cid=None, ime=None, drzava=None):
