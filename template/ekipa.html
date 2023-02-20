@@ -15,7 +15,8 @@
         % for n in nemci:
         <li>
             <div class="column">
-                <div class="column">{{n[1]}}</div>
+
+                <div class="column"  onclick="window.location.href='/ekipa/{{n[0]}}';" style="cursor: pointer;">{{n[1]}}</div>
             </div>
         </li>
         % end

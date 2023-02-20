@@ -70,6 +70,11 @@ def ekipa_stran():
 
     return template("template/ekipa.html", ekipe=podatki, nemci=nemci, anglezi=anglezi, italjani=italjani)
 
+@get("/dirkalisca/<eid:int>")
+def ekipe_detajli(eid):
+    ekipa = ekipa_model.pridobi_ekipo(eid)
+    dirkaci = ekipa_model.ekipa_vsi_dirkaci(eid)
+    return template("template/ekipa_detaili.html", ekipa=ekipa, dirkaci=dirkaci)
 
 run(debug=True, reloader=True)
 

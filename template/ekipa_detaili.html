@@ -1,0 +1,19 @@
+% rebase('template/osnova.html', title='Ekipa')
+
+<div class="row">
+    <div class="col-md-4">
+        <h1>{{ ekipa }}</h1>
+        <table class="table">
+            <tbody>
+              <tr>
+                <td>Dirkači:</td>
+                <td>
+                    % for d in dirkaci:
+                    <li> {{ d[0] }} </li>
+                    % end
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+</div>
