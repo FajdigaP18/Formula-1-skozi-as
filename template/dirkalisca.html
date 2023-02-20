@@ -1,13 +1,20 @@
 % rebase('template/osnova.html', title='Dirkališča')
 
-<h1>Vsa dirkalisca so</h1>
-
-<ul>
-    % for pr in dirkalisca:
-    <li>
-        <div class="columns">
-            <div class="column"> {{pr[0]}} {{ pr[1] }}, {{ pr[2] }}, {{ pr[3] }}</div>
-        </div>
-    </li>
-    % end
-</ul>
+<table class="table">
+    <thead>
+      <tr>
+        <th>IME</th>
+        <th>LOKACIJA</th>
+        <th>DRŽAVA</th>
+      </tr>
+    </thead>
+    <tbody>
+      % for d in dirkalisca:
+      <tr onclick="window.location.href='/dirkalisca/{{ d[0] }}';" style="cursor: pointer;">
+        <td>{{ d[1] }}</td>
+        <td>{{ d[2] }}</td>
+        <td>{{ d[3] }}</td>
+      </tr>
+      % end
+    </tbody>
+  </table>
