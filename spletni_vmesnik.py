@@ -54,10 +54,10 @@ def dirkalisca_stran():
 
 @get("/dirkalisca/<did:int>")
 def dirkalisca_detajli(did):
-    #dirkalisce = dirkalisca_model.pridobi_dirkalisce(did)
+    dirkalisce = dirkalisca_model.pridobi_dirkalisce(did)
     dirkac = dirkalisca_model.pridobi_vsa_dirkalisca()
     kdo = dirkalisca_model.kdo_najveckrat_zmagal(did)
-    return template("template/dirkalisce_detaili.html", dirkac=dirkac, kdo = kdo)#, dirkalisce=dirkalisce)
+    return template("template/dirkalisce_detaili.html", dirkac=dirkac, kdo = kdo, dirkalisce=dirkalisce)
 
 @get("/ekipa")
 def ekipa_stran():

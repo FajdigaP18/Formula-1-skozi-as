@@ -256,7 +256,7 @@ class Dirkalisce:
         self.drzava = drzava
     
     def __str__(self):
-        return self.ime
+        return str(self.ime)
     
     @staticmethod
     def poisci_sql(sql, podatki = None):
@@ -271,7 +271,7 @@ class Dirkalisce:
                  FROM dirkalisca
                 WHERE cid = ?;'''
         podatki = conn.execute(sql, [cid]).fetchone()
-        yield Dirkalisce(podatki)
+        return Dirkalisce(podatki[0], podatki[1], podatki[2])
     
     @staticmethod
     def pridobi_vsa_dirkalisca():

@@ -5,12 +5,12 @@
       <img src="/static/img/profilepic.jpg" class="img-responsive" alt="Profile Picture">
     </div>
     <div class="col-md-8">
-      <h1>{{ dirkac }}</h1>
+      <h1 class="fs-1 fw-bold">{{ dirkac }}</h1>
 
       <table class="table">
         <tbody>
           <tr>
-            <td>Narodnost:</td>
+            <td class="fs-6 fw-bold">Narodnost:</td>
             <td>
                 % for k in drzavljanstvo:
                 <p> {{k[4]}}</p>
@@ -19,7 +19,7 @@
 
           </tr>
           <tr>
-            <td>Datum rojstva:</td>
+            <td class="fs-6 fw-bold">Datum rojstva:</td>
             <td>
                 % for d in datum:
                 <p> {{d[3].split('-')[2]}}.{{d[3].split('-')[1]}}.{{d[3].split('-')[0]}} </p>
@@ -27,28 +27,45 @@
             </td>
           </tr>
           <tr>
-            <td>Ekipe:</td>
+            <td class="fs-6 fw-bold">Ekipe:</td>
             <td>
                 % for e in ekipe:
-                <li> {{ e[0] }} </li>
+                <p> {{ e[0] }} </p>
                 % end
             </td>
           </tr>
           <tr>
-            <td>Kolikokrat je bil na zmagovalnem odru:</td>
+            <td class="fs-6 fw-bold">Kolikokrat je bil na zmagovalnem odru:</td>
             % for o in oder:
             <td>{{ o[2] }}</td>
             % end
           </tr>
           <tr>
-            <td>Njegova najboljša uverstitev/e:</td>
-            % for u in uvrstitve:
-            <td>
-                % for dir in u:
-                <li>{{ dir[2] }}. {{ dir[3] }}, {{ dir[4] }}, {{ dir[5] }}</li>
+            <td class="fs-6 fw-bold">Njegove najboljša uverstitev/e:</td>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>UVRSTITEV</th>
+                  <th>EKIPA</th>
+                  <th>DIRKALIŠČE</th>
+                  <th>DATUM</th>
+                </tr>
+              </thead>
+              <tbody>
+                % for u in uvrstitve:
+                <tr>
+                  % for d in u:
+                
+                  <td>{{ d[2] }}</td>
+                  <td>{{ d[3] }}</td>
+                  <td>{{ d[4] }}</td>
+                  <td>{{ d[5] }}</td>
+                  </tr>
+                  % end
+                
                 % end
-            </td>
-            % end
+              </tbody>
+            </table>
           </tr>
         </tbody>
       </table>
