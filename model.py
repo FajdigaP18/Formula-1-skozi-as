@@ -26,8 +26,6 @@ class Dirkac:
         self.priimek = priimek
         self.drzava = drzava
         self.rojstvo = rojstvo
-        self.drzava = drzava
-        self.rojstvo = rojstvo
         
     def __str__(self):
         return f'{self.ime} {self.priimek}, {self.drzava}, {self.rojstvo}'
@@ -66,8 +64,7 @@ class Dirkac:
     
     # vse ekipe, za katere je dirkal 
     # NISM SE PREVERILA CE DELUJE !!!!!!!!!!!
-    @staticmethod
-    def vse_ekipe(did):
+
     @staticmethod
     def vse_ekipe(did):
         '''Poda tabelo vseh ekip v katerih je dirkal dirkač.'''
