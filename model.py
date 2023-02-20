@@ -216,10 +216,25 @@ class Ekipa:
                       ime,
                       drzava
                  FROM ekipa
-                WHERE eid = 1;
+                WHERE eid = ?;
         '''
         podatki = conn.execute(sql, [eid]).fetchone()
         return Ekipa(podatki[0], podatki[1], podatki[2])
+    
+    @staticmethod
+    def ekipa_vsi_dirkaci(eid):
+        '''Pridobi vse dirkace, ki so dirkali za to ekipo.'''
+        sql = '''SELECT DISTINCT dirkaci.ime,
+                               dirkaci.priimek
+                 FROM dirkaci
+                      INNER JOIN
+                      rezultati ON dirkaci.did = rezultati.did
+                      INNER JOIN
+                      ekipa ON rezultati.cid = ekipa.eid
+                WHERE ekipa.eid = ?;'''
+        podatki = conn.execute(sql, [eid]).fetchall()
+        for dirkac in podatki:
+            yield dirkac
         
 class Dirkalisce:
     def __init__(self, cid=None, ime=None, drzava=None):
