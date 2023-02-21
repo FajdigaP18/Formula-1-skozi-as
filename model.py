@@ -34,12 +34,12 @@ class Dirkac:
     def dobi_dirkaca(did):
         with conn:
             cursor = conn.execute("""
-                SELECT did, ime, priimek 
+                SELECT did, ime, priimek, drzava, rojstvo
                 FROM dirkaci
                 WHERE did=?
             """, [did])
             podatki = cursor.fetchone()
-            return Dirkac(podatki[0], podatki[1], podatki[2])
+            return Dirkac(podatki[0], podatki[1], podatki[2], podatki[3], podatki[4])
     
     @staticmethod
     def poisci_sql(sql, podatki=None):
