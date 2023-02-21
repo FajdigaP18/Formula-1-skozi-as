@@ -16,7 +16,6 @@ stare_v_novo = {'Tyrrell':'Mercedes', 'BAR':'Mercedes', 'Honda':'Mercedes', 'Bra
                 'Wolf' : 'Williams'}
 
 
-# TODO: Tukaj ustvarimo bazo če je še ni
       
 class Dirkac:
     
@@ -381,7 +380,7 @@ class Sezona:
     @staticmethod
     def poisci_sql(sql, podatki = None):
         for poizvedba in conn.execute(sql, podatki):
-            yield Dirkalisce(*poizvedba)
+            yield Sezona(*poizvedba)
     
     @staticmethod
     def pridobi_vse_sezone():
@@ -394,6 +393,7 @@ class Sezona:
         for sezona in vse_sezone:
             yield sezona
             
+    @staticmethod
     def rezultati_sezona(sezona):
         '''Pridobi koncne rezultate sezone.'''
         sql = '''SELECT rezultati.did,
