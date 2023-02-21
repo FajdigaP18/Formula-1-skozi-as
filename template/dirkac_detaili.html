@@ -32,7 +32,7 @@
           </tr>
           <tr>
             <td class="fs-6 fw-bold">Kolikokrat je bil na zmagovalnem odru:</td>
-            % if not oder:
+            % if oder is not None:
               <td>0</td>
             % else:
               % for o in oder:
