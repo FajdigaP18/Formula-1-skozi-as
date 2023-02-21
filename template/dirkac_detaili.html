@@ -32,11 +32,11 @@
           </tr>
           <tr>
             <td class="fs-6 fw-bold">Kolikokrat je bil na zmagovalnem odru:</td>
-            % if oder is not None:
-              <td>0</td>
-            % else:
-              % for o in oder:
-              <td>{{ o[2] }}</td>
+            % for o in oder:
+              % if o is None:
+                <td>0</td>
+              % else:
+                <td>{{ o[2] }}</td>
               % end
             % end
           </tr>     
