@@ -74,6 +74,14 @@ def ekipe_detajli(eid):
     sezone = ekipa_model.ekipa_sezone(eid)
     return template("template/ekipa_detaili.html", ekipa=ekipa, dirkaci=dirkaci, sezone=sezone)
 
+@get("/search/<query>")
+def iskanje(query):
+    
+    ekipe = ekipa_model.poisci_po_imenu(query, limit=10)
+
+    return template("template/search.html", ekipe=ekipe)
+
+
 run(debug=True, reloader=True)
 
 

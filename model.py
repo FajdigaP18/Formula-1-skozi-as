@@ -1,4 +1,7 @@
 import sqlite3
+from paginate import paginate
+from requests import request
+
 
 conn = sqlite3.connect("f1database.sqlite3")
 
@@ -14,6 +17,9 @@ stare_v_novo = {'Tyrrell':'Mercedes', 'BAR':'Mercedes', 'Honda':'Mercedes', 'Bra
                 'Sauber' : 'Alfa Romeo', #LDS-Alfa Romeo,March-Alfa Romeo, Caterham
                 'Marussia': 'Haas F1 Team', 'Manor Marussia' : 'Haas F1 Team', 'Virgin' 'Haas F1 Team'
                 'Wolf' : 'Williams'}
+
+page_number = int(request.query.get('page', '1'))
+page_size = 100
 
 
       
@@ -80,12 +86,13 @@ class Dirkac:
     @staticmethod
     def najboljse_uvrstitve(ime, priimek):
         '''Poda podatke najboljše uvrstitve dirkača.'''
-        sql = '''SELECT DISTINCT dirkaci.ime,
+        sql = '''SELECT DISTINCT dirkaci.did, dirkaci.ime,
                               dirkaci.priimek,
                               rezultati.pozicija,
                               ekipa.ime,
                               dirkalisca.ime,
-                              dirka.datum
+                              dirka.datum,
+                              ekipa.eid
                          FROM dirkaci
                               INNER JOIN
                               rezultati ON dirkaci.did = rezultati.did
@@ -412,6 +419,17 @@ class Sezona:
         for rezultat in vsi_rezultati:
             yield rezultat
     
-    
-            
+
+def search(query):
+    # Query dirkaci, dirkalisca and ekipa for matching ime
+    sql ="""
+        SELECT * FROM dirkaci WHERE ime LIKE ?
+        UNION
+        SELECT * FROM dirkalisca WHERE ime LIKE ?
+        UNION
+        SELECT * FROM ekipa WHERE ime LIKE ?;
+        """
+    poizvedba = conn.execute(sql, query).fetchall()
+    for pov in poizvedba:
+        yield pov
     

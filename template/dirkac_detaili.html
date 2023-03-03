@@ -53,13 +53,13 @@
               </thead>
               <tbody>
                 % for u in uvrstitve:
+                % for d in u:
                 <tr>
-                  % for d in u:
                 
-                  <td>{{ d[2] }}</td>
                   <td>{{ d[3] }}</td>
-                  <td>{{ d[4] }}</td>
-                  <td>{{ d[5] }}</td>
+                  <td onclick="window.location.href='/ekipa/{{ d[7] }}';" style="cursor: pointer;">{{ d[4] }}</td>
+                  <td onclick="window.location.href='/dirkalisca/{{ d[0] }}';" style="cursor: pointer;">{{ d[5] }}</td>
+                  <td>{{ d[6] }}</td>
                   </tr>
                   % end
                 
