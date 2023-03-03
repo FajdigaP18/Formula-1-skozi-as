@@ -26,7 +26,7 @@
             <td class="fs-6 fw-bold">Ekipe:</td>
             <td>
                 % for e in ekipe:
-                <p> {{ e[0] }} </p>
+                <p onclick="window.location.href='/ekipa/{{ e[1] }}';" style="cursor: pointer;"> {{ e[0] }} </p>
                 % end
             </td>
           </tr>

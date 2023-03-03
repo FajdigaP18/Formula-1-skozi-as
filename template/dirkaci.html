@@ -20,3 +20,20 @@
       % end
     </tbody>
   </table>
+
+
+<ul class="pagination">
+    % if current_page > 1:
+    <li class="page-item"><a class="page-link" href="?page={{ current_page - 1 }}">&laquo; Previous</a></li>
+    % end
+    
+    % for p in range(1, total_pages + 1):
+    <li class="page-item{% if p == current_page %} active{% endif %}">
+        <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+    </li>
+    % end
+    
+    % if current_page < total_pages:
+    <li class="page-item"><a class="page-link" href="?page={{ current_page + 1 }}">Next &raquo;</a></li>
+    % end
+</ul>

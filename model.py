@@ -1,6 +1,4 @@
 import sqlite3
-from paginate import paginate
-from requests import request
 
 
 conn = sqlite3.connect("f1database.sqlite3")
@@ -18,8 +16,6 @@ stare_v_novo = {'Tyrrell':'Mercedes', 'BAR':'Mercedes', 'Honda':'Mercedes', 'Bra
                 'Marussia': 'Haas F1 Team', 'Manor Marussia' : 'Haas F1 Team', 'Virgin' 'Haas F1 Team'
                 'Wolf' : 'Williams'}
 
-page_number = int(request.query.get('page', '1'))
-page_size = 100
 
 
       
@@ -53,15 +49,15 @@ class Dirkac:
             yield Dirkac(*poizvedba)
             
     @staticmethod
-    def vsi_dirkaci():
+    def vsi_dirkaci(limit, offset):
         '''Pridobi vse dirkace'''
         sql = '''SELECT ime,
                      priimek,
                      dirkaci.drzava,
                      dirkaci.rojstvo,
                      did
-                FROM dirkaci;'''
-        vsi_dirkaci = conn.execute(sql).fetchall()
+                FROM dirkaci LIMIT ? OFFSET ?'''
+        vsi_dirkaci = conn.execute(sql, (limit, offset)).fetchall()
         for dirkac in vsi_dirkaci:
             yield dirkac
     
@@ -69,7 +65,7 @@ class Dirkac:
     @staticmethod
     def vse_ekipe(did):
         '''Poda tabelo vseh ekip v katerih je dirkal dirkač.'''
-        sql = '''SELECT DISTINCT ekipa.ime
+        sql = '''SELECT DISTINCT ekipa.ime, ekipa.eid
                          FROM ekipa
                               INNER JOIN
                               rezultati ON ekipa.eid = rezultati.cid
@@ -231,7 +227,8 @@ class Ekipa:
     def ekipa_vsi_dirkaci(eid):
         '''Pridobi vse dirkace, ki so dirkali za to ekipo.'''
         sql = '''SELECT DISTINCT dirkaci.ime,
-                               dirkaci.priimek
+                               dirkaci.priimek,
+                               dirkaci.did
                  FROM dirkaci
                       INNER JOIN
                       rezultati ON dirkaci.did = rezultati.did
@@ -341,16 +338,18 @@ class Dirkalisce:
                        tabela1.proga,
                        tabela1.najboljsi_ime,
                        tabela1.najboljsi_priimek,
-                       tabela1.stevilo_zmag
+                       tabela1.stevilo_zmag,
+                       tabela1.najboljsi_id
                   FROM (
                            SELECT tabela.proga_id AS proga_id,
                                   tabela.proga AS proga,
                                   tabela.ime AS najboljsi_ime,
                                   tabela.priimek AS najboljsi_priimek,
-                                  max(tabela.st) AS stevilo_zmag
+                                  max(tabela.st) AS stevilo_zmag,
+                                  tabela.did AS najboljsi_id
                              FROM (
                                       SELECT rezultati.did,
-                                             dirkaci.did,
+                                             dirkaci.did AS did,
                                              dirkaci.ime AS ime,
                                              dirkaci.priimek AS priimek,
                                              dirka.dirkalisce,

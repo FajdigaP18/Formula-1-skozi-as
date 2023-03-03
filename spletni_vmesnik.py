@@ -2,10 +2,13 @@ from bottle import *
 import model
 
 
-# glavni_model = model.Model()
+# glavni_modeli
 dirkaci_model = model.Dirkac()
 dirkalisca_model = model.Dirkalisce()
 ekipa_model = model.Ekipa()
+
+# koliko zadetkov na stran
+page_size = 100
 
 @route("/static/img/<filename>")
 def serve_static_files_img(filename):
@@ -28,9 +31,15 @@ def glavna_stran():
 def dirkaci_stran():
     "Podatki pridobljeni iz modelov"
 
-    podatki = dirkaci_model.vsi_dirkaci()
+    page_number = int(request.query.get('page', '1'))
+    offset = (page_number - 1) * page_size
+    limit = page_size
 
-    return template("template/dirkaci.html", dirkaci=podatki)
+    total_pages = (855 + page_size - 1) // page_size
+
+    podatki = dirkaci_model.vsi_dirkaci(limit, offset)
+
+    return template("template/dirkaci.html", dirkaci=podatki,  total_pages=total_pages, current_page=page_number)
 
 @get("/dirkaci/<did:int>")
 def dirkaci_detajli(did):
