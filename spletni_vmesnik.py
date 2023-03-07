@@ -53,6 +53,15 @@ def dirkaci_detajli(did):
 
     return template("template/dirkac_detaili.html", dirkac=dirkac, ekipe=vse_ekipe, uvrstitve=najbol_uvrstitve, oder=zmag_oder, d=datum, drzavljanstvo=drzav)
 
+@get("/dirkaci/search")
+def iskanje_dirkac():
+
+    query = str(request.query.get("query"))
+
+    dirkaci = dirkaci_model.isci_po_dirkacih(query)
+
+    return template("template/search_dirkac.html", dirkaci=dirkaci)
+
 @get("/dirkalisca")
 def dirkalisca_stran():
 
@@ -67,8 +76,19 @@ def dirkalisca_detajli(did):
     kdo = dirkalisca_model.kdo_najveckrat_zmagal(did)
     return template("template/dirkalisce_detaili.html", dirkac=dirkac, kdo = kdo, dirkalisce=dirkalisce)
 
+@get("/dirkalisca/search")
+def iskanje_dirkalisce():
+
+    query = str(request.query.get("query"))
+
+    dirkalisca = dirkalisca_model.isci_po_dirkaliscih(query)
+
+    return template("template/search_dirkalisca.html", dirkalisca=dirkalisca)
+
 @get("/ekipa")
 def ekipa_stran():
+
+    
     podatki = ekipa_model.pridobi_vse_ekipe()
     nemci = ekipa_model.pridobi_vse_nemce()
     anglezi = ekipa_model.pridobi_vse_angleze()
@@ -83,12 +103,14 @@ def ekipe_detajli(eid):
     sezone = ekipa_model.ekipa_sezone(eid)
     return template("template/ekipa_detaili.html", ekipa=ekipa, dirkaci=dirkaci, sezone=sezone)
 
-@get("/search/<query>")
-def iskanje(query):
-    
-    ekipe = ekipa_model.poisci_po_imenu(query, limit=10)
+@get("/ekipa/search")
+def iskanje_ekipa():
 
-    return template("template/search.html", ekipe=ekipe)
+    query = str(request.query.get("query"))
+
+    ekipa = ekipa_model.isci_po_ekipah(query)
+
+    return template("template/search_ekipa.html", ekipa=ekipa)
 
 
 run(debug=True, reloader=True)

@@ -82,7 +82,7 @@ class Dirkac:
     @staticmethod
     def najboljse_uvrstitve(ime, priimek):
         '''Poda podatke najboljše uvrstitve dirkača.'''
-        sql = '''SELECT DISTINCT dirkaci.did, dirkaci.ime,
+        sql = '''SELECT DISTINCT dirkalisca.cid, dirkaci.ime,
                               dirkaci.priimek,
                               rezultati.pozicija,
                               ekipa.ime,
@@ -133,6 +133,31 @@ class Dirkac:
                          GROUP BY dirkaci.did
                         HAVING dirkaci.did = ?'''
         yield conn.execute(sql, [did]).fetchone()
+
+    @staticmethod
+    def isci_po_dirkacih(query):
+    # Query dirkaci
+        sql ="""
+            SELECT priimek, ime, drzava, rojstvo, did
+            FROM dirkaci 
+            WHERE ime LIKE ? 
+            UNION 
+            SELECT priimek, ime, drzava, rojstvo, did
+            FROM dirkaci 
+            WHERE priimek LIKE ?
+            UNION 
+            SELECT priimek, ime, drzava, rojstvo, did
+            FROM dirkaci 
+            WHERE drzava LIKE ?
+            UNION 
+            SELECT priimek, ime, drzava, rojstvo, did
+            FROM dirkaci 
+            WHERE rojstvo LIKE ?;
+            """
+        poizvedba = conn.execute(sql, [query, query, query, query]).fetchall()
+        for pov in poizvedba:
+            yield pov
+
 
     
 class Ekipa:
@@ -250,6 +275,22 @@ class Ekipa:
         podatki = conn.execute(sql, [eid]).fetchall()
         for leto in podatki:
             yield leto
+
+    @staticmethod
+    def isci_po_ekipah(query):
+    # Query ekipe
+        sql ="""
+            SELECT eid, ime, drzava 
+            FROM ekipa 
+            WHERE ime LIKE ? 
+            UNION 
+            SELECT eid, ime, drzava 
+            FROM ekipa 
+            WHERE drzava LIKE ?;
+            """
+        poizvedba = conn.execute(sql, [query, query]).fetchall()
+        for pov in poizvedba:
+            yield pov
     
             
 class Dirkalisce:
@@ -374,7 +415,27 @@ class Dirkalisce:
                        tabela1
                  WHERE tabela1.proga_id = ?;''' 
         podatki = conn.execute(sql, [proga_id]).fetchone()
-        yield podatki  
+        yield podatki
+
+    @staticmethod
+    def isci_po_dirkaliscih(query):
+    # Query dirkalisca
+        sql ="""
+            SELECT cid, ime, lokacija, drzava 
+            FROM dirkalisca 
+            WHERE ime LIKE ? 
+            UNION 
+            SELECT cid, ime, lokacija, drzava 
+            FROM dirkalisca 
+            WHERE lokacija LIKE ? 
+            UNION 
+            SELECT cid, ime, lokacija, drzava 
+            FROM dirkalisca 
+            WHERE drzava LIKE ?;
+            """
+        poizvedba = conn.execute(sql, [query, query, query]).fetchall()
+        for pov in poizvedba:
+            yield pov
 
 class Sezona:
     def __init__(self, leto=None):
@@ -419,16 +480,4 @@ class Sezona:
             yield rezultat
     
 
-def search(query):
-    # Query dirkaci, dirkalisca and ekipa for matching ime
-    sql ="""
-        SELECT * FROM dirkaci WHERE ime LIKE ?
-        UNION
-        SELECT * FROM dirkalisca WHERE ime LIKE ?
-        UNION
-        SELECT * FROM ekipa WHERE ime LIKE ?;
-        """
-    poizvedba = conn.execute(sql, query).fetchall()
-    for pov in poizvedba:
-        yield pov
     

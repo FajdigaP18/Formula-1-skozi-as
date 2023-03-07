@@ -1,0 +1,22 @@
+% rebase('template/osnova.html', title='Iskanje')
+
+<table class="table">
+    <thead>
+      <tr>
+        <th>PRIIMEK</th>
+        <th>IME</th>
+        <th>DRŽAVLJANSTVO</th>
+        <th>DATUM ROJSTVA</th>
+      </tr>
+    </thead>
+    <tbody>
+      % for d in dirkaci:
+      <tr onclick="window.location.href='/dirkaci/{{ d[4] }}';" style="cursor: pointer;">
+        <td>{{ d[1] }}</td>
+        <td>{{ d[0] }}</td>
+        <td>{{ d[2] }}</td>
+        <td>{{ d[3].split('-')[2]}}.{{d[3].split('-')[1]}}.{{d[3].split('-')[0] }}</td>
+      </tr>
+      % end
+    </tbody>
+  </table>

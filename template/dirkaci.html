@@ -1,5 +1,13 @@
 % rebase('template/osnova.html', title='Dirkači')
 
+<div>
+  <form method="get" action="/dirkaci/search">
+    <label for="query">Iskanje po dirkačih: </label>
+    <input type="text" id="query" name="query">
+    <button type="submit">Išči</button>
+  </form>
+</div>
+
 <table class="table">
     <thead>
       <tr>
@@ -15,7 +23,7 @@
         <td>{{ d[1] }}</td>
         <td>{{ d[0] }}</td>
         <td>{{ d[2] }}</td>
-        <td>{{ d[3] }}</td>
+        <td>{{ d[3].split('-')[2]}}.{{d[3].split('-')[1]}}.{{d[3].split('-')[0]}}</td>
       </tr>
       % end
     </tbody>
@@ -24,7 +32,7 @@
 
 <ul class="pagination">
     % if current_page > 1:
-    <li class="page-item"><a class="page-link" href="?page={{ current_page - 1 }}">&laquo; Previous</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ current_page - 1 }}">&laquo; Prejšna</a></li>
     % end
     
     % for p in range(1, total_pages + 1):
@@ -34,6 +42,6 @@
     % end
     
     % if current_page < total_pages:
-    <li class="page-item"><a class="page-link" href="?page={{ current_page + 1 }}">Next &raquo;</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ current_page + 1 }}">Naslednja &raquo;</a></li>
     % end
 </ul>
